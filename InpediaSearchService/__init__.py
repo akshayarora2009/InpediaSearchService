@@ -17,11 +17,11 @@ def search():
         raise InpediaException(401, constants.RESPONSE_MESSAGE_UNAUTHORIZED)
 
     query = request.args.get("q")
-    res = es_helper.query_es(query)
+    results = es_helper.query_es(query)
 
     res = dict()
     res['data'] = dict()
-    res['data']['res'] = res
+    res['data']['res'] = results
 
     return make_response(jsonify(res), 200)
 

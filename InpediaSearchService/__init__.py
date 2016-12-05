@@ -2,8 +2,10 @@ from flask import Flask, make_response, jsonify, request
 import InpediaSearchService.constants
 from InpediaSearchService.exceptions.InpediaException import InpediaException
 import InpediaSearchService.es_helper as es_helper
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 
 
 @app.route(constants.API_PATH_CLIENT + constants.API_PATH_TYPE, methods=['GET'])

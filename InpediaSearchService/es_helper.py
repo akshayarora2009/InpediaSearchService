@@ -6,8 +6,8 @@ es = Elasticsearch()
 
 def query_es(query):
     res = es.search(index=constants.INDEX_NAME,
-                    body={"query": {"fuzzy": {"title": {"value": query, "prefix_length": 1, "max_expansions": 100}}}})
-    hits = res['hits']
+                    body={"query":{"bool":{"should":[{"match":{"title":{"query":query,"boost":2,"fuzziness": "AUTO"}}},{"match":{"description":query}}]}}})
+    hits = res['hits']['hits']
     answer = []
 
     for hit in hits:

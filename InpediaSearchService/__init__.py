@@ -4,6 +4,7 @@ from InpediaSearchService.exceptions.InpediaException import InpediaException
 import InpediaSearchService.es_helper as es_helper
 from flask_cors import CORS
 import time
+import requests
 
 app = Flask(__name__)
 CORS(app)
@@ -39,7 +40,15 @@ def search():
 
 
 def verify_token(token):
-    return True
+    req_dict = {"token": token}
+    r = requests.post('http://localhost:4000/api/jwt/check', data=req_dict)
+    res = r.json()
+
+    if 'success' in res:
+        if res['success'] == "true":
+            return True
+
+    return False
 
 
 @app.errorhandler(InpediaException)

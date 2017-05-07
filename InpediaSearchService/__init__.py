@@ -28,6 +28,7 @@ def search():
     res['data']['res'] = results
 
     time_taken = time.perf_counter() - start_time
+    res['data']['meta'] = dict()
     res['data']['meta']['took'] = time_taken
 
     return make_response(jsonify(res), 200)

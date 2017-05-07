@@ -3,6 +3,7 @@ import InpediaSearchService.constants
 from InpediaSearchService.exceptions.InpediaException import InpediaException
 import InpediaSearchService.es_helper as es_helper
 from flask_cors import CORS
+import time
 
 app = Flask(__name__)
 CORS(app)
@@ -14,6 +15,7 @@ def search():
     The endpoint to perform a search for the given client and the requested `type`
     :return:
     """
+    start_time = time.perf_counter()
     token = request.args.get("token")
     if token is None or verify_token(token) is False:
         raise InpediaException(401, constants.RESPONSE_MESSAGE_UNAUTHORIZED)
@@ -24,6 +26,9 @@ def search():
     res = dict()
     res['data'] = dict()
     res['data']['res'] = results
+
+    time_taken = time.perf_counter() - start_time
+    res['data']['meta']['took'] = time_taken
 
     return make_response(jsonify(res), 200)
 

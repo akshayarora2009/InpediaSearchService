@@ -21,14 +21,19 @@ def search():
         raise InpediaException(401, constants.RESPONSE_MESSAGE_UNAUTHORIZED)
 
     query = request.args.get("q")
+
+    start_es= time.perf_counter()
     results = es_helper.query_es(query)
+    took_es = time.perf_counter() - start_es
 
     res = dict()
     res['data'] = dict()
     res['data']['res'] = results
 
     time_taken = time.perf_counter() - start_time
+    res['data']['meta'] = dict()
     res['data']['meta']['took'] = time_taken
+    res['data']['meta']['es_took'] = took_es
 
     return make_response(jsonify(res), 200)
 
